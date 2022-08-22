@@ -1,4 +1,4 @@
 export class CreateCarDto {
-  car_name: string;
-  car_number: string;
+  name: string;
+  license_plate: string;
 }

@@ -6,18 +6,18 @@ import { CreateCarDto } from './dto/create-car.dto';
 export class CarService {
   constructor(@Inject(PG_CONNECTION) private conn: any) {}
   async create(createCarDto: CreateCarDto) {
-    return this.conn.query(
-      `INSTERT INTO car(car_name,car_number) VALUES ($1,$2)
-      }) RETURNING * `,
-      [createCarDto.car_name, createCarDto.car_number],
+    return await this.conn.query(
+      `INSERT INTO car(name,license_plate) VALUES ($1,$2)
+      RETURNING * `,
+      [createCarDto.name, createCarDto.license_plate],
     );
   }
 
-  findAll() {
-    return `This action returns all car`;
+  async findAll() {
+    return await this.conn.query(`SELECT name , license_plate FROM car`);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
+  async findOne(id: number) {
+    return await this.conn.query(`SELECT * FROM car WHERE id = $1`, [id]);
   }
 }
