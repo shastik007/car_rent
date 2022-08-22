@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { PG_CONNECTION } from './../utils/constants';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateRentDto } from './dto/create-rent.dto';
 import { UpdateRentDto } from './dto/update-rent.dto';
 
 @Injectable()
 export class RentService {
+  constructor(@Inject(PG_CONNECTION) private conn: any) {}
   create(createRentDto: CreateRentDto) {
     return 'This action adds a new rent';
   }

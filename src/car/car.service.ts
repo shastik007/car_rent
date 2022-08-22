@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { PG_CONNECTION } from './../utils/constants';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateCarDto } from './dto/create-car.dto';
-import { UpdateCarDto } from './dto/update-car.dto';
 
 @Injectable()
 export class CarService {
-  create(createCarDto: CreateCarDto) {
-    return 'This action adds a new car';
+  constructor(@Inject(PG_CONNECTION) private conn: any) {}
+  async create(createCarDto: CreateCarDto) {
+    return this.conn.query(
+      `INSTERT INTO car(car_name,car_number) VALUES ($1,$2)
+      }) RETURNING * `,
+      [createCarDto.car_name, createCarDto.car_number],
+    );
   }
 
   findAll() {
@@ -14,13 +19,5 @@ export class CarService {
 
   findOne(id: number) {
     return `This action returns a #${id} car`;
-  }
-
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} car`;
   }
 }
