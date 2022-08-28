@@ -2,27 +2,38 @@ import { PG_CONNECTION } from './../utils/constants';
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateRentDto } from './dto/create-rent.dto';
 import { UpdateRentDto } from './dto/update-rent.dto';
+import { RentRepository } from "./repositories/rent.repository";
+import { AvilableCheckDto } from "./dto/avilableCheck.dto";
+
 
 @Injectable()
 export class RentService {
-  constructor(@Inject(PG_CONNECTION) private conn: any) {}
-  create(createRentDto: CreateRentDto) {
-    return 'This action adds a new rent';
+  constructor(private readonly rentRepository:RentRepository) {}
+  async create(createRentDto: CreateRentDto) {
+    const { rows } = await this.isAvialabelCar({
+      start_date:createRentDto.start_date,
+      end_date:createRentDto.end_date,
+      car_id:createRentDto.car_id
+    })
+    if (rows.length === 0){
+      return await this.rentRepository.create(createRentDto)
+    }
+    return 'this period is not avialabel!'
   }
 
-  findAll() {
-    return `This action returns all rent`;
+  async findAll() {
+    return await this.rentRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} rent`;
+  async findOne(id: number) {
+    return await this.rentRepository.findOne(id);
   }
 
   update(id: number, updateRentDto: UpdateRentDto) {
     return `This action updates a #${id} rent`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} rent`;
+  async isAvialabelCar(checkDto:AvilableCheckDto){
+    return await this.rentRepository.isAvialabelCar(checkDto)
   }
 }

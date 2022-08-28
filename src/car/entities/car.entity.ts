@@ -1,1 +1,5 @@
-export class Car {}
+export class Car {
+    readonly id: number;
+    readonly  model: string;
+    readonly
+}

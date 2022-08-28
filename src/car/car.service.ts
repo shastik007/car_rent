@@ -1,23 +1,26 @@
 import { PG_CONNECTION } from './../utils/constants';
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateCarDto } from './dto/create-car.dto';
+import { CarRepository } from "./repositories/car.repository";
 
 @Injectable()
 export class CarService {
-  constructor(@Inject(PG_CONNECTION) private conn: any) {}
+  constructor(private readonly carRepository:CarRepository) {}
   async create(createCarDto: CreateCarDto) {
-    return await this.conn.query(
-      `INSERT INTO car(name,license_plate) VALUES ($1,$2)
-      RETURNING * `,
-      [createCarDto.name, createCarDto.license_plate],
-    );
+    return await this.carRepository.create(createCarDto)
   }
-
   async findAll() {
-    return await this.conn.query(`SELECT name , license_plate FROM car`);
+    const {rows} = await this.carRepository.findAll()
+    return rows
   }
 
   async findOne(id: number) {
-    return await this.conn.query(`SELECT * FROM car WHERE id = $1`, [id]);
+    const { rows } = await this.carRepository.findOne(id)
+    return rows[0]
+  }
+
+  async getCarRaiting(car_id:string,start_date:string){
+    console.log(car_id)
+    return await this.carRepository.getCarRaiting(car_id,start_date)
   }
 }

@@ -20,4 +20,10 @@ export class CarController {
   findOne(@Param('id') id: string) {
     return this.carService.findOne(+id);
   }
+
+  @Get('/raiting/:car_number/:start_date')
+  getCarRaiting(@Param('car_number') car_id:string,@Param('start_date')start_date:string){
+    return this.carService.getCarRaiting(car_id,start_date)
+  }
+
 }

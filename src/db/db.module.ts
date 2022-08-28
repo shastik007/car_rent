@@ -9,7 +9,7 @@ const dbProvider = {
   useValue: new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'backend',
+    database: 'discovery',
     password: 'root',
     port: 5432,
   }),

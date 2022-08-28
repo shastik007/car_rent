@@ -35,8 +35,4 @@ export class RentController {
     return this.rentService.update(+id, updateRentDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rentService.remove(+id);
-  }
 }
